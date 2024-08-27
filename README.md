@@ -33,7 +33,6 @@ The primary objectives of the challenge include:
 
 ![Empty state(Window)](image.png)
 ![Error state (Window)](image-1.png)
-![Active state (Phone)](<localhost_5173_(iPhone SE) (2).png>)
 
 ### Links
 
