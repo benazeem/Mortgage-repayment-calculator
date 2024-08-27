@@ -13,6 +13,7 @@ type FormProps = {
   setMonthlyPayment: (payment: number) => void;
   setTotalPayment: (payment: number) => void;
   setTotalInterest: (payment: number) => void;
+  setFormSubmit: (submit: boolean) => void;
 };
 
 type ErrorState = {
@@ -22,15 +23,14 @@ type ErrorState = {
   mortgageType?: string;
 };
 
-function Form({setMonthlyPayment, setTotalPayment,setTotalInterest}: FormProps) {
+function Form({setMonthlyPayment, setTotalPayment,setTotalInterest,setFormSubmit}: FormProps) {
   const mortgageAmountRef = useRef<HTMLInputElement>(null);
   const mortgageTermRef = useRef<HTMLInputElement>(null);
   const interestRateRef = useRef<HTMLInputElement>(null);
   const repaymentRef = useRef<HTMLInputElement>(null);
   const interestOnlyRef = useRef<HTMLInputElement>(null);
   const [activeState, setActiveState] = useState("");
-  const [error, setError] = useState<ErrorState> ({});
-  const [formSubmit, setFormSubmit] = useState(false);
+  const [error, setError] = useState<ErrorState> ({ });
 
   const handleInputChange =(max: number) =>(e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
@@ -73,7 +73,7 @@ function Form({setMonthlyPayment, setTotalPayment,setTotalInterest}: FormProps) 
     setActiveState('')
    }
 
-   const handleSubmit = (e: React.MouseEventHandler<HTMLButtonElement>|React.MouseEvent)=>{
+   const handleSubmit = (e:  React.MouseEvent<HTMLButtonElement>)=>{
     e.preventDefault();
     const principle= Number(mortgageAmountRef.current?.value.replace(/,/g, ""));
     const months= 12 * Number(mortgageTermRef.current?.value);
@@ -81,7 +81,7 @@ function Form({setMonthlyPayment, setTotalPayment,setTotalInterest}: FormProps) 
     const interestOnly= interestOnlyRef.current?.checked;
     const repayment= repaymentRef.current?.checked;
 
-    const newError = {};
+    const newError: ErrorState = { };
 
     if (!principle) {
       newError.mortgageAmount = "This field is required";
@@ -99,7 +99,7 @@ function Form({setMonthlyPayment, setTotalPayment,setTotalInterest}: FormProps) 
 
     if(principle && months && rate) {
       const monthlyRepay = (principle*rate*Math.pow((1 + rate), months))/(Math.pow((1 + rate), months) - 1);
-      const totalPayment = principle + (monthlyRepay*months); 
+      const totalPayment = (monthlyRepay*months); 
 
       if(interestOnly) {
         const totalInterest = totalPayment - principle;
@@ -107,13 +107,11 @@ function Form({setMonthlyPayment, setTotalPayment,setTotalInterest}: FormProps) 
         setTotalPayment(totalPayment);
         setMonthlyPayment(0);
       }
-
       if (repayment) { 
         setMonthlyPayment(monthlyRepay);
         setTotalPayment(totalPayment);
         setTotalInterest(0);
       }
-      
       setFormSubmit(true);
 
     }

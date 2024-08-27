@@ -4,16 +4,18 @@ function Result({
   totalPayment,
   monthlyPayment,
   totalInterest,
+  formSubmit,
 }: {
   totalPayment: number;
   monthlyPayment: number;
   totalInterest: number;
+  formSubmit: boolean;
 })
 
 {
   return (
     <>
-      {(totalPayment > 0 )?  (
+      {formSubmit?  (
         <div className="w-full p-8 sm:p-0 flex flex-col lg:justify-evenly items-center self-stretch  rounded-none lg:rounded-lg lg:rounded-bl-[80px] lg:rounded-tl-none   bg-slate-800">
           <div className="mt-5" > 
             <h2 className="text-slate-50 text-xl px-5 "> Your results</h2>
